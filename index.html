@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eng. Eman Yassin - Computer Engineer</title>
+    <title>Eng.Eman Yassin - Computer Engineer</title>
     <meta name="description" content="Computer Engineer | Mobile App Developer | Flutter Developer">
     <meta name="keywords" content="Flutter, Mobile App Developer, Mobile App Development, Flutter Developer, Eman Yassin">
     <link rel="stylesheet" href="css/style.css">
@@ -12,9 +12,37 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <canvas id="preloader-canvas"></canvas>
+        <div class="preloader-curtain top"></div>
+        <div class="preloader-curtain bottom"></div>
+        <div class="loader-content">
+            <div class="loader-image-container">
+                <img src="image/avatar.png" alt="Eman Yassin" class="loader-image">
+            </div>
+            <h2 class="loader-text luxury-text">
+                <span class="letter">E</span>
+                <span class="letter">m</span>
+                <span class="letter">a</span>
+                <span class="letter">n</span>
+                <span class="letter">&nbsp;</span>
+                <span class="letter">Y</span>
+                <span class="letter">a</span>
+                <span class="letter">s</span>
+                <span class="letter">s</span>
+                <span class="letter">i</span>
+                <span class="letter">n</span>
+            </h2>
+            <div class="loader-bar-luxury">
+                <div class="loader-progress-luxury"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar">
-        <h2>Eman<span>.</span></h2>
+        <h2>Eng.Eman</h2>
         <button id="menu">
             <span></span>
             <span></span>
@@ -82,7 +110,7 @@
     <!-- Projects Section -->
     <section class="projects reveal" id="projects">
         <div class="contain-text">
-            <h1>My <span>Projects</span></h1>
+            <h1 class="text-reveal-anim">My <span>Projects</span></h1>
         </div>
         <div class="content">
             <div class="card-project">
@@ -185,7 +213,7 @@
 
     <!-- Services Section -->
     <section class="services reveal" id="services">
-        <h1 class="text_center"><span>My</span> Services</h1>
+        <h1 class="text_center text-reveal-anim"><span>My</span> Services</h1>
         <div class="box">
             <div class="card">
                 <i class="fas fa-mobile-alt"></i>
@@ -212,7 +240,7 @@
     <!-- Skills Section -->
     <section class="skills reveal" id="skills">
         <div class="container-skills">
-            <h1>My <span>Skills</span></h1>
+            <h1 class="text-reveal-anim">My <span>Skills</span></h1>
             <div class="contant-skills">
                 <div class="skill" style="animation-delay: 0s;">
                     <img src="icon/icon_flutter.png" alt="Flutter">
@@ -264,6 +292,7 @@
     <!-- GSAP & Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
     <script src="js/script.js"></script>

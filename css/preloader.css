@@ -1,0 +1,125 @@
+
+/* Luxury Preloader */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#preloader-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+.preloader-curtain {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: #0f172a; /* Deep Slate Luxury Background */
+    background-image: radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 100%),
+                      radial-gradient(circle at 100% 0%, rgba(118, 75, 162, 0.05) 0%, transparent 50%);
+    background-size: 200% 200%;
+    z-index: 1;
+    transition: transform 1s cubic-bezier(0.7, 0, 0.3, 1);
+    animation: backgroundShift 8s ease infinite alternate;
+}
+
+@keyframes backgroundShift {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+.preloader-curtain.top {
+    top: 0;
+}
+
+.preloader-curtain.bottom {
+    bottom: 0;
+}
+
+.loader-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.loader-image-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+    transform: scale(0);
+    opacity: 0;
+}
+
+.loader-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.luxury-text {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    letter-spacing: 0.2rem;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.luxury-text .letter {
+    display: inline-block;
+    transform: translateY(120%);
+    opacity: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    color: #f8fafc;
+}
+
+.loader-bar-luxury {
+    width: 280px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    border-radius: 1px;
+}
+
+.loader-progress-luxury {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+    background-size: 200% auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}

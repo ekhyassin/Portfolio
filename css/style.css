@@ -1,3 +1,5 @@
+@import url('preloader.css');
+
 :root {
     /* Luxurious Color Palette */
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -317,6 +319,19 @@ span {
     background-clip: text;
 }
 
+/* Text Reveal Utility */
+.text-reveal-container {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom; /* Fix alignment */
+}
+
+.text-reveal-line {
+    display: inline-block;
+    transform: translateY(100%);
+    opacity: 0;
+}
+
 /* Buttons */
 .btn {
     position: relative;
@@ -383,6 +398,8 @@ span {
     background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
     border-radius: 50%;
     animation: float 20s ease-in-out infinite;
+    transform: translate(calc(var(--mouse-x, 0) * -0.02), calc(var(--mouse-y, 0) * -0.02));
+    transition: transform 0.1s linear;
 }
 
 .home::after {
@@ -396,6 +413,8 @@ span {
     border-radius: 50%;
     animation: float 15s ease-in-out infinite;
     animation-delay: -5s;
+    transform: translate(calc(var(--mouse-x, 0) * 0.03), calc(var(--mouse-y, 0) * 0.03));
+    transition: transform 0.1s linear;
 }
 
 .home .content {
@@ -536,6 +555,8 @@ span {
     height: 400px;
     background: radial-gradient(circle, rgba(168, 237, 234, 0.15) 0%, transparent 70%);
     border-radius: 50%;
+    transform: translate(calc(var(--mouse-x, 0) * 0.02), calc(var(--mouse-y, 0) * 0.02));
+    transition: transform 0.1s linear;
 }
 
 .about .container-image {
@@ -771,6 +792,8 @@ span {
     height: 500px;
     background: radial-gradient(circle, rgba(252, 182, 159, 0.12) 0%, transparent 70%);
     border-radius: 50%;
+    transform: translate(calc(var(--mouse-x, 0) * -0.015), calc(var(--mouse-y, 0) * -0.015));
+    transition: transform 0.1s linear;
 }
 
 .text_center {
