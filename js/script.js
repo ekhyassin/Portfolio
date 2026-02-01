@@ -26,8 +26,10 @@ if (menu) {
 // Close mobile menu and smooth scroll when clicking on a link
 navLinks.forEach((link) => {
   link.addEventListener("click", (e) => {
-    e.preventDefault();
     const targetId = link.getAttribute("href");
+    if (!targetId.startsWith("#")) return; // Handle external links if any
+
+    e.preventDefault();
     const targetSection = document.querySelector(targetId);
 
     if (targetSection) {
@@ -36,12 +38,12 @@ navLinks.forEach((link) => {
       }
 
       gsap.to(window, {
-        duration: 1.2,
+        duration: 0.8, // Slightly faster for responsiveness
         scrollTo: {
           y: targetSection,
-          offsetY: 80, // Account for fixed navbar
+          offsetY: 70, // Slightly reduced for better alignment
         },
-        ease: "power3.inOut",
+        ease: "power2.out",
       });
     }
   });
@@ -157,28 +159,16 @@ if (typingText) {
   setTimeout(type, 2000);
 }
 
-// 3. Animation Logic - Runs on Window Load to ensure Layout
-window.addEventListener("load", () => {
-  // Check if GSAP is loaded
-  if (typeof gsap === "undefined") {
-    console.warn("GSAP not loaded. Animations disabled.");
-    const preloader = document.querySelector(".preloader");
-    if (preloader) preloader.style.display = "none";
-    return;
-  }
-
-  // Register Plugins
-  if (typeof ScrollTrigger !== "undefined") {
-    gsap.registerPlugin(ScrollTrigger);
-  }
-  if (typeof ScrollToPlugin !== "undefined") {
+// 3. Animation Logic
+// Pre-register plugins
+if (typeof gsap !== "undefined") {
+  if (typeof ScrollTrigger !== "undefined") gsap.registerPlugin(ScrollTrigger);
+  if (typeof ScrollToPlugin !== "undefined")
     gsap.registerPlugin(ScrollToPlugin);
-  }
+}
 
-  // Lock Scroll initially
-  document.body.classList.add("no-scroll");
-
-  // --- PRELOADER PARTICLES ---
+// Start Preloader Earlier
+function initPreloader() {
   const canvas = document.getElementById("preloader-canvas");
   if (canvas) {
     const ctx = canvas.getContext("2d");
@@ -208,12 +198,9 @@ window.addEventListener("load", () => {
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.opacity < this.life) {
-          this.opacity += 0.01;
-        }
-        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+        if (this.opacity < this.life) this.opacity += 0.01;
+        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height)
           this.reset();
-        }
       }
       draw() {
         ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.3})`;
@@ -231,12 +218,12 @@ window.addEventListener("load", () => {
         p.update();
         p.draw();
       });
-      this.particleAnimId = requestAnimationFrame(animateParticles);
+      window.particleAnimId = requestAnimationFrame(animateParticles);
     };
     animateParticles();
   }
 
-  // --- LUXURY PRELOADER TIMELINE ---
+  // PRELOADER TIMELINE
   const preloaderTl = gsap.timeline({
     onComplete: () => {
       document.body.classList.remove("no-scroll");
@@ -249,115 +236,117 @@ window.addEventListener("load", () => {
       scale: 1,
       opacity: 1,
       duration: 1,
-      ease: "back.out(1.7)",
+      ease: "elastic.out(1, 0.75)",
     })
     .to(
       ".luxury-text .letter",
       {
         y: 0,
         opacity: 1,
-        duration: 1,
-        stagger: 0.1,
-        ease: "power4.out",
+        duration: 0.6,
+        stagger: 0.05,
+        ease: "power3.out",
       },
-      "-=0.5",
+      "-=0.4",
     )
     .to(
       ".loader-progress-luxury",
       {
         width: "100%",
-        duration: 1.2,
+        duration: 0.8,
         ease: "power2.inOut",
       },
-      "-=0.5",
+      "-=0.3",
     )
-    .to(".loader-bar-luxury", {
+    .to(
+      ".loader-bar-luxury",
+      {
+        opacity: 0,
+        duration: 0.3,
+      },
+      "<",
+    )
+    .to(".loader-content", {
+      y: -20,
       opacity: 0,
-      y: 10,
       duration: 0.4,
       ease: "power2.in",
     })
     .to(
-      [".luxury-text .letter", ".loader-image-container"],
+      ".preloader",
       {
-        y: -50,
         opacity: 0,
-        duration: 0.6,
-        stagger: 0.05,
-        ease: "power2.in",
+        duration: 0.8,
+        ease: "power2.inOut",
       },
       "-=0.2",
-    )
-    .to(
-      ".preloader-curtain.top",
-      {
-        yPercent: -100,
-        duration: 1.2,
-        ease: "power4.inOut",
-      },
-      "-=0.2",
-    )
-    .to(
-      ".preloader-curtain.bottom",
-      {
-        yPercent: 100,
-        duration: 1.2,
-        ease: "power4.inOut",
-      },
-      "<",
     )
     .set(".preloader", { display: "none" })
     .add(() => {
       if (window.particleAnimId) cancelAnimationFrame(window.particleAnimId);
     });
+}
 
-  // --- HERO SECTION REVEAL ---
-  function revealSite() {
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+// Hero Reveal function (called when preloader finished)
+function revealSite() {
+  const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    tl.fromTo(
-      ".home .content_text h4",
-      { y: 50, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 1 },
+  tl.fromTo(
+    ".home .content_text h4",
+    { y: 30, autoAlpha: 0 },
+    { y: 0, autoAlpha: 1, duration: 0.8 },
+  )
+    .fromTo(
+      ".home .content_text h1",
+      { y: 30, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.8 },
+      "-=0.6",
     )
-      .fromTo(
-        ".home .content_text h1",
-        { y: 50, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 1 },
-        "-=0.8",
-      )
-      .fromTo(
-        ".home .content_text h3",
-        { y: 50, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.8 },
-        "-=0.7",
-      )
-      .fromTo(
-        ".home .content_text .btn",
-        { y: 50, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.8 },
-        "-=0.6",
-      )
-      .fromTo(
-        ".home .social a",
-        { y: 20, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1 },
-        "-=0.6",
-      )
-      .fromTo(
-        ".home .container-image",
-        { x: 50, autoAlpha: 0, scale: 0.9 },
-        {
-          x: 0,
-          autoAlpha: 1,
-          scale: 1,
-          duration: 1.5,
-          ease: "elastic.out(1, 0.75)",
-          onComplete: () => ScrollTrigger.refresh(),
-        },
-        "-=1.2",
-      );
-  }
+    .fromTo(
+      ".home .content_text h3",
+      { y: 30, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.8 },
+      "-=0.6",
+    )
+    .fromTo(
+      ".home .content_text .btn",
+      { y: 30, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.8 },
+      "-=0.6",
+    )
+    .fromTo(
+      ".home .social a",
+      { y: 20, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1 },
+      "-=0.6",
+    )
+    .fromTo(
+      ".home .container-image",
+      { x: 30, autoAlpha: 0, scale: 0.95 },
+      {
+        x: 0,
+        autoAlpha: 1,
+        scale: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        onComplete: () => ScrollTrigger.refresh(),
+      },
+      "-=0.8",
+    );
+}
+
+// Run preloader immediately
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("no-scroll");
+  initPreloader();
+});
+
+window.addEventListener("load", () => {
+  // Register Plugins (redundant but safe)
+  if (typeof gsap === "undefined") return;
+
+  // Scroll triggering logic (setupScrollAnim, textRevealElements, etc. follow)
+  // These use the logic already defined in script.js
 
   // --- SCROLL ANIMATIONS ---
 
