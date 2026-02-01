@@ -8,15 +8,19 @@ const navbar = document.getElementById("navbar");
 const navLinks = document.querySelectorAll(".nav-link");
 
 // Mobile Menu Toggle
+function handleMenu() {
+  const menuBtn = document.getElementById("menu");
+  const actionsMenu = document.getElementById("actions");
+  if (menuBtn && actionsMenu) {
+    menuBtn.classList.toggle("is-active");
+    actionsMenu.classList.toggle("is-active");
+  }
+}
+
 if (menu) {
   menu.addEventListener("click", () => {
     handleMenu();
   });
-}
-
-function handleMenu() {
-  menu.classList.toggle("is-active");
-  actions.classList.toggle("is-active");
 }
 
 // Close mobile menu and smooth scroll when clicking on a link
@@ -204,7 +208,9 @@ window.addEventListener("load", () => {
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.opacity < this.life) this.opacity += 0.01;
+        if (this.opacity < this.life) {
+          this.opacity += 0.01;
+        }
         if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
           this.reset();
         }

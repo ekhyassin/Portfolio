@@ -1159,6 +1159,37 @@ footer .card h3 {
 /**********************************************************
 ********************************Media Queries***************
 ***********************************************************/
+@media screen and (max-width: 767px) {
+    nav ul {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3rem;
+        z-index: 1000;
+    }
+
+    body.dark-theme nav ul {
+        background: rgba(26, 32, 44, 0.98);
+    }
+
+    nav ul.is-active,
+    #navbar ul#actions.is-active {
+        display: flex !important;
+    }
+
+    #menu {
+        display: block;
+    }
+}
+
 @media screen and (max-width: 575px) {
     html {
         font-size: 14px;
@@ -1185,21 +1216,14 @@ footer .card h3 {
     
     #theme-toggle {
         order: 2;
-        margin: 0 1rem; /* Adjust spacing */
+        margin: 0 1rem;
     }
 
     #menu {
-        display: block;
         order: 3;
     }
 
-    nav ul {
-        display: none;
-        position: fixed;
-        /* ... existing styles ... */
-    }
-
-    /* Fix Skills Layout - Side by Side */
+    /* Skills Layout */
     .contant-skills {
         display: flex;
         flex-direction: row !important;
@@ -1210,7 +1234,7 @@ footer .card h3 {
     }
 
     .skill {
-        width: 80px; /* Slightly smaller to fit more */
+        width: 80px;
         height: 80px;
         margin: 0.5rem;
     }
@@ -1284,27 +1308,6 @@ footer .card h3 {
     .skills .container-skills {
         order: 2;
     }
-
-    .skills .container-skills h1::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .contant-skills {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .skill {
-        width: 100px;
-        height: 100px;
-    }
-
-    footer {
-        padding: 3rem 5%;
-    }
 }
 
 @media screen and (min-width: 576px) and (max-width: 767px) {
@@ -1317,37 +1320,22 @@ footer .card h3 {
     }
 
     /* Tablet Nav Order */
-    nav { justify-content: space-between; }
-    nav h2 { order: 1; }
-    #theme-toggle { order: 2; margin: 0 auto; }
-    #menu { display: block; order: 3; }
-
-    nav ul {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 3rem;
-        z-index: 1000;
+    nav { 
+        justify-content: space-between; 
+    }
+    
+    nav h2 { 
+        order: 1; 
     }
 
-    body.dark-theme nav ul {
-        background: rgba(26, 32, 44, 0.98);
+    #theme-toggle { 
+        order: 2; 
+        margin: 0 auto; 
     }
 
-    nav ul.is-active {
-        display: flex;
-    }
-
-    #menu {
-        display: block;
+    #menu { 
+        display: block; 
+        order: 3; 
     }
 
     .home .content {
