@@ -67,6 +67,7 @@ html {
     scroll-behavior: auto; /* GSAP handles smoothing if implemented, otherwise auto */
     scroll-padding-top: 80px;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
 }
 
 body {

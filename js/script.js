@@ -122,41 +122,42 @@ window.addEventListener("scroll", updateActiveLink);
 
 // 2. Typing Effect (Runs independently)
 const typingText = document.querySelector(".typing-text");
-if (typingText) {
-  const words = [
-    "Computer Engineer",
-    "Flutter Developer",
-    "Mobile App Developer",
-  ];
-  let wordIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
+function initTyping() {
+  if (typingText) {
+    const words = [
+      "Computer Engineer",
+      "Flutter Developer",
+      "Mobile App Developer",
+    ];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
 
-  function type() {
-    const currentWord = words[wordIndex];
-    if (isDeleting) {
-      typingText.textContent = currentWord.substring(0, charIndex - 1);
-      charIndex--;
-    } else {
-      typingText.textContent = currentWord.substring(0, charIndex + 1);
-      charIndex++;
+    function type() {
+      const currentWord = words[wordIndex];
+      if (isDeleting) {
+        typingText.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingText.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+      }
+
+      let typeSpeed = isDeleting ? 50 : 100;
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        typeSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        typeSpeed = 500;
+      }
+
+      setTimeout(type, typeSpeed);
     }
-
-    let typeSpeed = isDeleting ? 50 : 100;
-
-    if (!isDeleting && charIndex === currentWord.length) {
-      typeSpeed = 2000;
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      wordIndex = (wordIndex + 1) % words.length;
-      typeSpeed = 500;
-    }
-
-    setTimeout(type, typeSpeed);
+    type();
   }
-  // Start typing slightly later to allow hero animation to start
-  setTimeout(type, 2000);
 }
 
 // 3. Animation Logic
@@ -228,6 +229,8 @@ function initPreloader() {
     onComplete: () => {
       document.body.classList.remove("no-scroll");
       revealSite();
+      initTyping();
+      initSiteAnimations(); // Trigger remaining animations immediately after preloader
     },
   });
 
@@ -235,7 +238,7 @@ function initPreloader() {
     .to(".loader-image-container", {
       scale: 1,
       opacity: 1,
-      duration: 1,
+      duration: 0.4, // Faster entrance
       ease: "elastic.out(1, 0.75)",
     })
     .to(
@@ -243,48 +246,73 @@ function initPreloader() {
       {
         y: 0,
         opacity: 1,
-        duration: 0.6,
-        stagger: 0.05,
+        duration: 0.3, // Faster text
+        stagger: 0.02, // Faster typing
         ease: "power3.out",
       },
-      "-=0.4",
+      "-=0.2",
     )
     .to(
       ".loader-progress-luxury",
       {
         width: "100%",
-        duration: 0.8,
+        duration: 0.4, // Faster progress bar
         ease: "power2.inOut",
       },
-      "-=0.3",
+      "-=0.1",
     )
     .to(
       ".loader-bar-luxury",
       {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.1,
       },
       "<",
     )
     .to(".loader-content", {
       y: -20,
       opacity: 0,
-      duration: 0.4,
+      duration: 0.2, // Faster exit
       ease: "power2.in",
     })
     .to(
       ".preloader",
       {
         opacity: 0,
-        duration: 0.8,
+        duration: 0.4, // Faster fade out
         ease: "power2.inOut",
       },
-      "-=0.2",
+      "-=0.1",
     )
     .set(".preloader", { display: "none" })
     .add(() => {
       if (window.particleAnimId) cancelAnimationFrame(window.particleAnimId);
     });
+}
+
+function prepareInitialStates() {
+  if (typeof gsap === "undefined") return;
+
+  // Immediately hide Home section elements to prevent them from being visible
+  // during the preloader fade-out, ensuring a smooth entrance animation.
+  gsap.set(
+    ".home .content_text h4, .home .content_text h1, .home .content_text h3, .home .content_text .btn",
+    {
+      y: 30,
+      autoAlpha: 0,
+    },
+  );
+
+  gsap.set(".home .social a", {
+    y: 20,
+    autoAlpha: 0,
+  });
+
+  gsap.set(".home .container-image", {
+    x: 30,
+    autoAlpha: 0,
+    scale: 0.95,
+  });
 }
 
 // Hero Reveal function (called when preloader finished)
@@ -294,31 +322,31 @@ function revealSite() {
   tl.fromTo(
     ".home .content_text h4",
     { y: 30, autoAlpha: 0 },
-    { y: 0, autoAlpha: 1, duration: 0.8 },
+    { y: 0, autoAlpha: 1, duration: 0.5 },
   )
     .fromTo(
       ".home .content_text h1",
       { y: 30, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8 },
-      "-=0.6",
+      { y: 0, autoAlpha: 1, duration: 0.5 },
+      "-=0.4",
     )
     .fromTo(
       ".home .content_text h3",
       { y: 30, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8 },
-      "-=0.6",
+      { y: 0, autoAlpha: 1, duration: 0.5 },
+      "-=0.4",
     )
     .fromTo(
       ".home .content_text .btn",
       { y: 30, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8 },
-      "-=0.6",
+      { y: 0, autoAlpha: 1, duration: 0.5 },
+      "-=0.4",
     )
     .fromTo(
       ".home .social a",
       { y: 20, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.1 },
-      "-=0.6",
+      { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.05 },
+      "-=0.4",
     )
     .fromTo(
       ".home .container-image",
@@ -327,51 +355,26 @@ function revealSite() {
         x: 0,
         autoAlpha: 1,
         scale: 1,
-        duration: 1.2,
+        duration: 0.8,
         ease: "power3.out",
-        onComplete: () => ScrollTrigger.refresh(),
+        onComplete: () => {
+          // Animation complete
+        },
       },
-      "-=0.8",
+      "-=0.6",
     );
 }
 
-// Run preloader immediately
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("no-scroll");
-  initPreloader();
-});
-
-window.addEventListener("load", () => {
-  // Register Plugins (redundant but safe)
+// 4. Initializing Site Animations (Previously in window.load)
+function initSiteAnimations() {
   if (typeof gsap === "undefined") return;
 
-  // Scroll triggering logic (setupScrollAnim, textRevealElements, etc. follow)
-  // These use the logic already defined in script.js
-
+  // Scroll triggering logic
   // --- SCROLL ANIMATIONS ---
-
-  // Helper to setup scroll triggers
-  const setupScrollAnim = (selector, formVars, toVars) => {
-    const elements = document.querySelectorAll(selector);
-    if (elements.length > 0) {
-      gsap.fromTo(elements, formVars, {
-        ...toVars,
-        scrollTrigger: {
-          trigger: elements, // Trigger when elements themselves enter
-          start: "top 85%", // Trigger earlier (85% down viewport)
-          toggleActions: "play none none reverse",
-          ...toVars.scrollTrigger, // Allow override
-        },
-      });
-    }
-  };
 
   // Text Reveal Logic
   const textRevealElements = document.querySelectorAll(".text-reveal-anim");
   textRevealElements.forEach((el) => {
-    // Split text logic could go here, but for simplicity we'll just animate the element up
-    // Ideally, we wrap content in a span if not already done.
-
     gsap.fromTo(
       el,
       { y: 50, autoAlpha: 0, rotationX: -20 },
@@ -379,7 +382,7 @@ window.addEventListener("load", () => {
         y: 0,
         autoAlpha: 1,
         rotationX: 0,
-        duration: 1,
+        duration: 0.6,
         ease: "power3.out",
         scrollTrigger: {
           trigger: el,
@@ -398,7 +401,7 @@ window.addEventListener("load", () => {
       {
         x: 0,
         autoAlpha: 1,
-        duration: 1.2,
+        duration: 0.8,
         scrollTrigger: { trigger: ".about", start: "top 75%" },
       },
     );
@@ -408,16 +411,14 @@ window.addEventListener("load", () => {
       {
         y: 0,
         autoAlpha: 1,
-        duration: 1,
-        stagger: 0.2,
+        duration: 0.6,
+        stagger: 0.1,
         scrollTrigger: { trigger: ".about", start: "top 75%" },
       },
     );
   }
 
-  // Projects Section - FIXING VISIBILITY
-  // Using fromTo ensures start and end states are explicit
-  // clearProps: "transform" ensures VanillaTilt can take over after animation
+  // Projects Section
   const projects = document.querySelectorAll(".card-project");
   if (projects.length > 0) {
     gsap.fromTo(
@@ -426,12 +427,12 @@ window.addEventListener("load", () => {
       {
         y: 0,
         autoAlpha: 1,
-        duration: 0.8,
-        stagger: 0.15,
+        duration: 0.5,
+        stagger: 0.1,
         ease: "power3.out",
-        clearProps: "transform", // CRITICAL: Release transform control for VanillaTilt
+        clearProps: "transform",
         scrollTrigger: {
-          trigger: ".projects", // Setup trigger on the section
+          trigger: ".projects",
           start: "top 85%",
         },
       },
@@ -447,10 +448,10 @@ window.addEventListener("load", () => {
       {
         scale: 1,
         autoAlpha: 1,
-        duration: 0.8,
-        stagger: 0.2,
+        duration: 0.5,
+        stagger: 0.1,
         ease: "back.out(1.7)",
-        clearProps: "transform", // CRITICAL for VanillaTilt
+        clearProps: "transform",
         scrollTrigger: {
           trigger: ".services",
           start: "top 85%",
@@ -468,9 +469,9 @@ window.addEventListener("load", () => {
       {
         scale: 1,
         autoAlpha: 1,
-        duration: 0.6,
+        duration: 0.4,
         stagger: {
-          each: 0.05,
+          each: 0.03,
           grid: "auto",
           from: "center",
         },
@@ -485,7 +486,7 @@ window.addEventListener("load", () => {
 
   // --- INTERACTION ---
 
-  // Vanilla Tilt Init - Safely
+  // Vanilla Tilt Init
   if (typeof VanillaTilt !== "undefined") {
     const tiltElements = document.querySelectorAll(
       ".card-project, .services .card",
@@ -505,12 +506,6 @@ window.addEventListener("load", () => {
   document.addEventListener("mousemove", (e) => {
     const mouseX = e.clientX;
     const mouseY = e.clientY;
-
-    // Select background blobs if they exist (styled with pseudo-elements in CSS, so we might need to target containers or add actual spans if pseudo-elements are unreachable via JS directly.
-    // Actually, style.css uses ::before/::after. We cannot animate pseudo-elements nicely with mousemove GSAP unless we use CSS variables.
-    // Strategy: Animate the container's background position or add a specific class?
-    // Better Strategy: Update CSS variables --mouse-x, --mouse-y on body and use calc() in CSS.
-
     document.body.style.setProperty("--mouse-x", mouseX + "px");
     document.body.style.setProperty("--mouse-y", mouseY + "px");
   });
@@ -541,6 +536,20 @@ window.addEventListener("load", () => {
     });
   });
 
-  // Refresh ScrollTrigger calculations
+  // Final Refresh to ensure positioning is correct
+  ScrollTrigger.refresh();
+}
+
+// Run preloader immediately
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("no-scroll");
+  prepareInitialStates();
+  initPreloader();
+});
+
+// Initial Load Handling
+window.addEventListener("load", () => {
+  // We keep some interactions that don't depend on ScrollTrigger logic if needed
+  // However, most site logic is now moved to initSiteAnimations() triggered by preloader
   ScrollTrigger.refresh();
 });
